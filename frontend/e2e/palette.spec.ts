@@ -39,8 +39,9 @@ test.describe("Palette selector", () => {
       "data-palette",
       "espresso"
     );
-    // Navigate to another page. The root is now a domain dashboard that does
-    // not list _e2e_fixture, so go to the deterministic fixture report directly.
+    // Navigate to another page. The root is a home view (recent reports +
+    // active domains) that does not list _e2e_fixture, so go to the
+    // deterministic fixture directly.
     await page.goto("/research/_e2e_fixture");
     await expect(page).toHaveURL("/research/_e2e_fixture");
     // Palette should persist

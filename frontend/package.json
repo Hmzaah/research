@@ -11,7 +11,10 @@
     "unrs-resolver"
   ],
   "scripts": {
+    "sync:research": "node scripts/sync-research.mjs",
+    "predev": "node scripts/sync-research.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/sync-research.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

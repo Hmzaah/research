@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { cache } from "react";
 import { parse as parseYaml } from "yaml";
 import { z } from "zod";
 
@@ -22,8 +23,8 @@ const IGNORED_NAMES = new Set(["node_modules", ".git", ".DS_Store"]);
 
 // Known research phases. Anything else is left `undefined` so the UI can
 // degrade gracefully rather than mislabel an unexpected directory.
-const PHASES = ["gather", "retrieval", "clustering"] as const;
-type Phase = (typeof PHASES)[number];
+export const PHASES = ["gather", "retrieval", "clustering"] as const;
+export type Phase = (typeof PHASES)[number];
 
 // Resource types as written in report headers (`- **Type**: ...`).
 const RESOURCE_TYPES = [
@@ -264,7 +265,14 @@ function buildEntry(fullPath: string): ContentEntry | null {
 }
 
 // Scan every Markdown report under `research/runs/**`, deduped by real path.
-export function getContentEntries(): ContentEntry[] {
+//
+// Wrapped in React's `cache` so the full recursive scan (which reads every
+// Markdown file in the tree) runs once per request rather than once per caller:
+// the authenticated layout builds the search index while the home page builds
+// both the recent-report feed and the domain summaries. The research tree is
+// append-only and grows without bound, so collapsing those into one pass keeps
+// render cost flat as content accumulates.
+export const getContentEntries = cache((): ContentEntry[] => {
   const seen = new Set<string>();
   const files = collectMarkdownFiles(RUNS_DIR, seen);
   const entries: ContentEntry[] = [];
@@ -273,7 +281,7 @@ export function getContentEntries(): ContentEntry[] {
     if (entry) entries.push(entry);
   }
   return entries.sort((a, b) => a.href.localeCompare(b.href));
-}
+});
 
 // Aggregate per-domain summaries for the dashboard, preferring `domain.yaml`
 // metadata (display_name/description/clusters) when present.

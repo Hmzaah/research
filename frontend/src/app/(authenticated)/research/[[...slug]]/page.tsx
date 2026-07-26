@@ -8,10 +8,10 @@ import {
   getBreadcrumbs,
 } from "@/lib/docs-content";
 import { extractTocItems } from "@/lib/toc";
-import { getDomainSummaries } from "@/lib/content-index";
+import { getHomeData } from "@/lib/home-feed";
 import { DocsLayout } from "@/components/docs/docs-layout";
 import { DirectoryIndex } from "@/components/docs/directory-index";
-import { DomainDashboard } from "@/components/dashboard/domain-dashboard";
+import { HomeView } from "@/components/home/home-view";
 import { MarkdownRenderer } from "@/components/markdown/markdown-renderer";
 import { ReportHeader } from "@/components/report/report-header";
 import { Toc } from "@/components/report/toc";
@@ -60,14 +60,15 @@ export default async function DocsPage({ params }: PageProps) {
   const breadcrumbs = getBreadcrumbs(currentSlug);
   const currentPath = currentSlug.length > 0 ? `/research/${currentSlug.join("/")}` : "/research";
 
-  // Top page: show the domain dashboard instead of a raw directory listing.
+  // Top page: show the home view (recent reports + search + active domains)
+  // instead of a raw directory listing.
   if (currentSlug.length === 0) {
-    const summaries = getDomainSummaries();
+    const homeData = getHomeData();
 
     return (
       <DocsLayout tree={tree} currentPath={currentPath}>
         <Breadcrumbs items={breadcrumbs} />
-        <DomainDashboard summaries={summaries} />
+        <HomeView data={homeData} />
       </DocsLayout>
     );
   }
