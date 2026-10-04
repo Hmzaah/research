@@ -1,0 +1,5 @@
+vendor/
+build/
+runs/
+*.tar.gz
+agent/cg/
