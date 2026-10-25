@@ -15,7 +15,7 @@ agent/                  提出物のソース（tar.gz のルートになる）
     policy.py           全 SelectContext 対応のヒューリスティック方策（高速・ロールアウト兼用）
     search.py           決定化ロールアウト探索（SearchBegin/SearchStep, 逐次半減, 600s 予算管理）
     agent.py            デッキ選択・探索/方策の振り分け・合法手ガード（例外時も必ず合法手を返す）
-    features.py / value.py / value_weights.json   学習済み価値関数（実験用・既定では無効）
+    features.py / value.py   学習済み価値関数のコード（実験用・既定では無効。重みは tools/train_value.py でローカル生成し、コミット・提出しない）
     meta_decks.json     既知メタデッキ（相手の非公開カード推定に使用）
 decks/                  メタデッキ 17 種（評価用の対戦相手プール）
 tools/

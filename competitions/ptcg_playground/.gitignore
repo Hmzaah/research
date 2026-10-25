@@ -3,3 +3,4 @@ build/
 runs/
 *.tar.gz
 agent/cg/
+agent/ptcg/value_weights.json
